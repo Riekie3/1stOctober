@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+<defs>
+<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f5d6b8"/><stop offset=".6" stop-color="#e8b28f"/><stop offset="1" stop-color="#b9766a"/></linearGradient>
+<filter id="b"><feGaussianBlur stdDeviation="13"/></filter>
+<filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 .5  0 0 0 0 .45  0 0 0 0 .4  0 0 0 .22 0"/></filter>
+<radialGradient id="v" cx=".5" cy=".5" r=".75"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#2a1d14" stop-opacity=".45"/></radialGradient>
+</defs>
+<rect width="1200" height="800" fill="url(#g)"/>
+<circle cx="864" cy="256" r="96" fill="#fff4e0" opacity=".9" filter="url(#b)"/><path d="M0 800 L0 440.00000000000006 Q 100 399.3759253152535 200 423.72559115464134 Q 300 358.0316081680505 400 429.079493474718 Q 500 397.1404887536264 600 410.0648273993586 Q 700 338.66230305687634 800 425.77582564008236 Q 900 322.90459858854524 1000 435.8628258928018 Q 1100 329.54434095860665 1200 433.91283043376774 Q 1300 378.82330099997273 1400 421.07330218007485 L1200 800 Z" fill="#c9a88e" opacity=".9"/><path d="M0 800 L0 544 Q 100 470.96922154955996 200 534.568861151379 Q 300 446.5481136806999 400 519.3822105077013 Q 500 440.4360088046808 600 537.3333267566437 Q 700 423.66839673447816 800 529.5813054580154 Q 900 429.00249859644214 1000 532.9979701344846 Q 1100 440.6521508463901 1200 518.233091759604 Q 1300 460.71961099222284 1400 532.833982096442 L1200 800 Z" fill="#a88672" opacity=".9"/><path d="M0 800 L0 648 Q 100 556.2112847027421 200 640.3539996623779 Q 300 559.0169767546547 400 638.776105160255 Q 500 559.9982852190725 600 646.3932256504862 Q 700 592.830523163467 800 623.534269463054 Q 900 561.4005966472442 1000 642.6092834112278 Q 1100 602.6788775151032 1200 627.2981321128542 Q 1300 529.1192622227218 1400 631.8133924285944 L1200 800 Z" fill="#7d6559" opacity=".9"/>
+<rect width="1200" height="800" filter="url(#n)"/>
+<rect width="1200" height="800" fill="url(#v)"/>
+<text x="1164" y="766" text-anchor="end" font-family="Georgia, serif" font-style="italic" font-size="35" fill="#fff8ec" opacity=".75">placeholder · 10</text>
+</svg>

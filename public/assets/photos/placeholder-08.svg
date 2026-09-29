@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900">
+<defs>
+<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9e1d6"/><stop offset=".6" stop-color="#d6c7b3"/><stop offset="1" stop-color="#b39c80"/></linearGradient>
+<filter id="b"><feGaussianBlur stdDeviation="13"/></filter>
+<filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 .5  0 0 0 0 .45  0 0 0 0 .4  0 0 0 .22 0"/></filter>
+<radialGradient id="v" cx=".5" cy=".5" r=".75"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#2a1d14" stop-opacity=".45"/></radialGradient>
+</defs>
+<rect width="1200" height="900" fill="url(#g)"/>
+<circle cx="432" cy="468" r="180" fill="#f7f1e8"/><circle cx="432" cy="468" r="126.00000000000001" fill="#7a5a44"/><circle cx="816.0000000000001" cy="414" r="144" fill="#f7f1e8"/><circle cx="816.0000000000001" cy="414" r="99" fill="#c78d6a"/>
+<rect width="1200" height="900" filter="url(#n)"/>
+<rect width="1200" height="900" fill="url(#v)"/>
+<text x="1164" y="866" text-anchor="end" font-family="Georgia, serif" font-style="italic" font-size="35" fill="#fff8ec" opacity=".75">placeholder · 08</text>
+</svg>
