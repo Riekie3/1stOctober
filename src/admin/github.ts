@@ -49,6 +49,9 @@ export function forgetToken() {
 async function gh<T>(token: string, path: string, init: RequestInit = {}): Promise<T> {
   const res = await fetch(`${API}${path}`, {
     ...init,
+    // GitHub lets browsers reuse answers for 60 s — progress checks and
+    // "what's the latest version" must always be fresh.
+    cache: "no-store",
     headers: {
       Accept: "application/vnd.github+json",
       Authorization: `Bearer ${token}`,
@@ -179,28 +182,38 @@ interface Run {
   head_branch: string;
   created_at: string;
   html_url: string;
+  head_commit?: { message?: string };
 }
+
+export const ACTIONS_URL = `https://github.com/${REPO.owner}/${REPO.name}/actions`;
 
 export type DeployState =
   | { stage: "building"; url?: string }
   | { stage: "publishing"; url?: string }
   | { stage: "live" }
   | { stage: "failed"; url?: string }
-  | { stage: "unknown" };
+  | { stage: "unknown"; reason?: string };
 
-/** Follows the build workflow for a commit, then the Pages deployment after it. */
-export async function deployState(token: string, sha: string, since: string): Promise<DeployState> {
+/**
+ * Follows the build workflow for a commit, then the Pages deployment that
+ * comes after it. Only GitHub's own timestamps are compared (never the
+ * laptop's clock).
+ */
+export async function deployState(token: string, sha: string): Promise<DeployState> {
   try {
-    const runs = await gh<{ workflow_runs: Run[] }>(token, `${repoPath}/actions/runs?per_page=10`);
+    const runs = await gh<{ workflow_runs: Run[] }>(token, `${repoPath}/actions/runs?per_page=15`);
     const build = runs.workflow_runs.find((r) => r.head_sha === sha);
     if (!build) return { stage: "building" };
     if (build.status !== "completed") return { stage: "building", url: build.html_url };
     if (build.conclusion !== "success") return { stage: "failed", url: build.html_url };
-    const pages = runs.workflow_runs.find((r) => r.head_branch === "gh-pages" && r.created_at >= since);
+    // The deploy step labels the online copy "deploy: <commit>", so match on that.
+    const pages = runs.workflow_runs.find((r) => r.head_branch === "gh-pages" && r.head_commit?.message?.includes(sha));
     if (!pages || pages.status !== "completed") return { stage: "publishing", url: pages?.html_url };
     return pages.conclusion === "success" ? { stage: "live" } : { stage: "failed", url: pages.html_url };
   } catch (e) {
-    if (e instanceof GitHubError && (e.status === 403 || e.status === 404)) return { stage: "unknown" };
+    if (e instanceof GitHubError && (e.status === 401 || e.status === 403 || e.status === 404)) {
+      return { stage: "unknown", reason: "your key can't read build progress (add “Actions: Read-only” to it)" };
+    }
     throw e;
   }
 }

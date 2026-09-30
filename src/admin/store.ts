@@ -28,7 +28,8 @@ export interface PublishState {
   message?: string;
   conflictFiles?: string[];
   sha?: string;
-  since?: string;
+  /** when the changes were saved to GitHub (for the elapsed-time display) */
+  savedAt?: number;
   deploy?: gh.DeployState;
 }
 
@@ -256,7 +257,6 @@ export async function publish(overwrite = false) {
       return;
     }
 
-    const since = new Date(Date.now() - 5000).toISOString();
     const sha = await gh.commitChanges(token, head, changes, summary(parts, changes), (message) => set({ publish: { phase: "working", message } }));
 
     // Published: this is the new baseline.
@@ -274,8 +274,8 @@ export async function publish(overwrite = false) {
     } catch {
       /* ignore */
     }
-    set({ base: clone(state.draft), baseSha: sha, pending, restored: false, publish: { phase: "tracking", sha, since, deploy: { stage: "building" } } });
-    track(sha, since);
+    set({ base: clone(state.draft), baseSha: sha, pending, restored: false, publish: { phase: "tracking", sha, savedAt: Date.now(), deploy: { stage: "building" } } });
+    track(sha);
   } catch (e) {
     const conflict = e instanceof gh.GitHubError && e.status === 422;
     set({
@@ -286,19 +286,30 @@ export async function publish(overwrite = false) {
   }
 }
 
-async function track(sha: string, since: string) {
+async function track(sha: string) {
   const started = Date.now();
-  while (token && state.publish.sha === sha && Date.now() - started < 10 * 60_000) {
-    await new Promise((r) => setTimeout(r, 6000));
+  let failures = 0;
+  const still = () => state.publish.sha === sha && state.publish.phase === "tracking";
+  const finish = (publish: PublishState) => still() && set({ publish: { ...publish, sha, savedAt: state.publish.savedAt } });
+
+  while (token && still()) {
+    await new Promise((r) => setTimeout(r, 5000));
+    if (!still()) return;
+    // Builds normally take 1–2 minutes; don't keep anyone waiting forever.
+    if (Date.now() - started > 5 * 60_000) {
+      return finish({ phase: "done", message: "Your changes are saved. The site should be updated by now — open it to check.", deploy: { stage: "unknown" } });
+    }
     try {
-      const deploy = await gh.deployState(token, sha, since);
-      if (state.publish.sha !== sha) return;
-      if (deploy.stage === "live") return set({ publish: { phase: "done", sha, deploy, message: "Live on the site." } });
-      if (deploy.stage === "failed") return set({ publish: { phase: "error", sha, deploy, message: "The site couldn't be rebuilt. The previous version is still live." } });
-      if (deploy.stage === "unknown") return set({ publish: { phase: "done", sha, deploy, message: "Saved. The site updates in about 2 minutes." } });
-      set({ publish: { ...state.publish, deploy } });
+      const deploy = await gh.deployState(token, sha);
+      failures = 0;
+      if (deploy.stage === "live") return finish({ phase: "done", deploy, message: "Live on the site." });
+      if (deploy.stage === "failed") return finish({ phase: "error", deploy, message: "Your changes are saved, but the site couldn't be rebuilt. The previous version is still live." });
+      if (deploy.stage === "unknown")
+        return finish({ phase: "done", deploy, message: `Your changes are saved. The site updates in about 2 minutes — ${deploy.reason ?? "progress can't be shown"}.` });
+      if (still()) set({ publish: { ...state.publish, deploy } });
     } catch {
-      /* network hiccup — keep waiting */
+      if (++failures >= 4)
+        return finish({ phase: "done", deploy: { stage: "unknown" }, message: "Your changes are saved. Couldn't check the progress (connection problem) — the site updates in about 2 minutes." });
     }
   }
 }

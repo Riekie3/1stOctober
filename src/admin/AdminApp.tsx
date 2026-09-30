@@ -16,7 +16,7 @@ import {
   Settings2,
   X,
 } from "lucide-react";
-import { REPO } from "./github";
+import { ACTIONS_URL, REPO } from "./github";
 import { validate, type Problem } from "./validate";
 import { dirtyParts, discardChanges, load, openPreview, publish, resume, signIn, signOut, useAdmin } from "./store";
 import General from "./sections/General";
@@ -266,16 +266,17 @@ function PublishBar() {
       </Bar>
     );
 
-  const stages: Record<string, string> = {
-    building: "Saved to GitHub. Building the site…",
-    publishing: "Built. Putting it online…",
-    unknown: "Saved. The site updates in about 2 minutes.",
-  };
+  if (p.phase === "tracking") return <DeploySteps stage={p.deploy?.stage ?? "building"} savedAt={p.savedAt} url={p.deploy && "url" in p.deploy ? p.deploy.url : undefined} />;
 
   return (
     <Bar tone={p.phase === "error" ? "warn" : p.phase === "done" ? "ok" : "info"}>
-      {p.phase === "working" || p.phase === "tracking" ? <Loader2 size={15} className="animate-spin" /> : p.phase === "done" ? <CheckCircle2 size={15} /> : p.phase === "error" ? <AlertTriangle size={15} /> : null}
-      <span className="flex-1">{p.phase === "tracking" ? stages[p.deploy?.stage ?? "building"] : p.message}</span>
+      {p.phase === "working" ? <Loader2 size={15} className="animate-spin" /> : p.phase === "done" ? <CheckCircle2 size={15} /> : p.phase === "error" ? <AlertTriangle size={15} /> : null}
+      <span className="flex-1">{p.message}</span>
+      {p.phase === "done" && p.deploy?.stage === "unknown" && (
+        <a href={ACTIONS_URL} target="_blank" rel="noreferrer" className="flex items-center gap-1 underline">
+          Check on GitHub <ExternalLink size={13} />
+        </a>
+      )}
       {p.phase === "done" && (
         <a href={SITE_URL} target="_blank" rel="noreferrer" className="flex items-center gap-1 underline">
           View site <ExternalLink size={13} />
@@ -283,6 +284,48 @@ function PublishBar() {
       )}
       {p.deploy && "url" in p.deploy && p.deploy.url && (
         <a href={p.deploy.url} target="_blank" rel="noreferrer" className="underline">
+          Details
+        </a>
+      )}
+    </Bar>
+  );
+}
+
+/** Saved → Building → Online, with a clear "safe to reload" once saved. */
+function DeploySteps({ stage, savedAt, url }: { stage: string; savedAt?: number; url?: string }) {
+  const [, tick] = useState(0);
+  useEffect(() => {
+    const t = window.setInterval(() => tick((n) => n + 1), 1000);
+    return () => window.clearInterval(t);
+  }, []);
+  const secs = savedAt ? Math.max(0, Math.round((Date.now() - savedAt) / 1000)) : 0;
+  const elapsed = `${Math.floor(secs / 60)}:${String(secs % 60).padStart(2, "0")}`;
+  const steps = [
+    { label: "Saved to GitHub", state: "done" },
+    { label: "Building the site", state: stage === "building" ? "active" : "done" },
+    { label: "Putting it online", state: stage === "publishing" ? "active" : stage === "building" ? "waiting" : "done" },
+  ];
+  return (
+    <Bar tone="info">
+      <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
+        {steps.map((s, i) => (
+          <span key={s.label} className="flex items-center gap-1.5">
+            {i > 0 && <span className="text-taupe">→</span>}
+            {s.state === "done" ? (
+              <CheckCircle2 size={15} className="text-[#3f7a32]" />
+            ) : s.state === "active" ? (
+              <Loader2 size={15} className="animate-spin text-gold-deep" />
+            ) : (
+              <span className="inline-block h-3 w-3 rounded-full border border-taupe/50" />
+            )}
+            <span className={s.state === "waiting" ? "text-taupe" : s.state === "active" ? "font-semibold text-ink" : "text-ink"}>{s.label}</span>
+          </span>
+        ))}
+        <span className="tabular-nums text-taupe">· {elapsed}</span>
+      </span>
+      <span className="flex-1 text-right text-[0.78rem] text-[#3f7a32]">✓ Your changes are safe — you can reload or close this page. The site updates by itself (usually 1–2 min).</span>
+      {url && (
+        <a href={url} target="_blank" rel="noreferrer" className="underline">
           Details
         </a>
       )}
