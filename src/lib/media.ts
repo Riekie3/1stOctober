@@ -6,4 +6,5 @@ export const media: MemoryItem[] = memories.map((m) => ({
   ...m,
   src: assetUrl(m.src) ?? m.src,
   poster: assetUrl(m.poster),
+  live: assetUrl(m.live),
 }));

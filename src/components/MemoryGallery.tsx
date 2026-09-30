@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Play } from "lucide-react";
 import type { MemoryItem } from "../data/memories";
-import MediaModal, { type Origin } from "./MediaModal";
+import MediaModal, { LiveIcon, type Origin } from "./MediaModal";
 
 /* ─── Layout: lanes of memories flying right → left ─────── */
 
@@ -188,7 +188,7 @@ export default function MemoryGallery({ items }: { items: MemoryItem[] }) {
                       }}
                       type="button"
                       onClick={() => open(i)}
-                      aria-label={`${m.type === "video" ? "Play video" : "Open photo"}: ${m.caption}`}
+                      aria-label={`${m.type === "video" ? "Play video" : m.live ? "Open live photo" : "Open photo"}: ${m.caption}`}
                       aria-haspopup="dialog"
                       className="group block w-full cursor-zoom-in bg-[#f7f1e6] p-[5%] pb-[4%] text-left shadow-[0_18px_40px_-12px_rgba(0,0,0,0.55),0_4px_10px_rgba(0,0,0,0.25)] outline-offset-4"
                       style={{ visibility: paused ? "hidden" : "visible" }}
@@ -209,6 +209,11 @@ export default function MemoryGallery({ items }: { items: MemoryItem[] }) {
                           />
                         ) : (
                           <VideoThumb item={m} onShape={(w, h) => learnShape(i, w, h)} />
+                        )}
+                        {m.live && (
+                          <span aria-hidden className="absolute left-1.5 top-1.5 grid h-5 w-5 place-items-center rounded-full bg-black/30 text-white/90 backdrop-blur-sm">
+                            <LiveIcon size={12} />
+                          </span>
                         )}
                         <span aria-hidden className="pointer-events-none absolute inset-0 shadow-[inset_0_0_30px_rgba(0,0,0,0.18)]" />
                       </span>

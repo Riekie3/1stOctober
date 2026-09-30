@@ -45,10 +45,14 @@ export default function MediaModal({ items, index, origin, aspectOf, onClose, on
   const videoRef = useRef<HTMLVideoElement>(null);
   const [aspect, setAspect] = useState<number>(1);
 
+  // Best guess of the shape when a memory opens; the real one arrives as it loads.
+  // Runs only when the memory changes — not every time the flying gallery re-renders.
+  const aspectOfRef = useRef(aspectOf);
+  aspectOfRef.current = aspectOf;
   useLayoutEffect(() => {
     if (index === null) return;
-    setAspect(aspectOf(index) ?? (items[index].type === "video" ? 16 / 9 : 1));
-  }, [index, aspectOf, items]);
+    setAspect(aspectOfRef.current(index) ?? (items[index].type === "video" ? 9 / 16 : 3 / 4));
+  }, [index, items]);
 
   // Size: large enough to enjoy, never swallowing the whole screen.
   const narrow = vp.w < 640;
@@ -93,7 +97,7 @@ export default function MediaModal({ items, index, origin, aspectOf, onClose, on
       } else if (e.key === "ArrowRight" && !(e.target instanceof HTMLVideoElement)) onNavigate(1);
       else if (e.key === "ArrowLeft" && !(e.target instanceof HTMLVideoElement)) onNavigate(-1);
       else if (e.key === "Tab" && figRef.current) {
-        const f = [...figRef.current.querySelectorAll<HTMLElement>("button, video, [href]")].filter((el) => !el.hasAttribute("disabled"));
+        const f = [...figRef.current.querySelectorAll<HTMLElement>("button, video[controls], [href]")].filter((el) => !el.hasAttribute("disabled"));
         if (!f.length) return;
         const first = f[0];
         const last = f[f.length - 1];
@@ -164,9 +168,11 @@ export default function MediaModal({ items, index, origin, aspectOf, onClose, on
                         onLoad={(e) => setAspect(e.currentTarget.naturalWidth / e.currentTarget.naturalHeight)}
                         className="h-full w-full object-contain"
                       />
-                    ) : (
+                    ) : null}
+                    {item.type === "image" && item.live ? <LiveMotion key={item.live} src={item.live} /> : null}
+                    {item.type === "video" ? (
                       <ModalVideo item={item} videoRef={videoRef} onAspect={setAspect} />
-                    )}
+                    ) : null}
                   </motion.div>
                 </AnimatePresence>
               </div>
@@ -266,5 +272,77 @@ function ModalVideo({ item, videoRef, onAspect }: { item: MemoryItem; videoRef: 
       onEnded={() => music.duck(false)}
       className="h-full w-full bg-black object-contain"
     />
+  );
+}
+
+/**
+ * iPhone Live Photo: the short clip plays once, silently, over the still when
+ * the photo opens, then fades back. The LIVE badge replays it.
+ */
+function LiveMotion({ src }: { src: string }) {
+  const ref = useRef<HTMLVideoElement>(null);
+  const [moving, setMoving] = useState(false);
+
+  const play = () => {
+    const v = ref.current;
+    if (!v) return;
+    v.muted = true;
+    if (v.currentTime > 0.05) v.currentTime = 0;
+    v.play()
+      .then(() => setMoving(true))
+      .catch(() => setMoving(false));
+  };
+
+  // Start just after the photo has finished growing into place.
+  useEffect(() => {
+    const t = window.setTimeout(play, 650);
+    return () => {
+      window.clearTimeout(t);
+      ref.current?.pause();
+    };
+  }, [src]);
+
+  return (
+    <>
+      <video
+        ref={ref}
+        src={src}
+        muted
+        playsInline
+        preload="auto"
+        tabIndex={-1}
+        aria-hidden
+        onEnded={(e) => {
+          setMoving(false);
+          // Rewind while hidden: replaying from the "ended" state can get cancelled by the browser.
+          const v = e.currentTarget;
+          window.setTimeout(() => {
+            v.pause();
+            v.currentTime = 0;
+          }, 550);
+        }}
+        className={`pointer-events-none absolute inset-0 h-full w-full object-contain transition-opacity duration-500 ${moving ? "opacity-100" : "opacity-0"}`}
+      />
+      <button
+        type="button"
+        onClick={play}
+        aria-label="Play the live photo again"
+        className="absolute left-2.5 top-2.5 flex items-center gap-1.5 rounded-full bg-black/35 py-1 pl-1.5 pr-2.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-white backdrop-blur-sm transition hover:bg-black/50"
+      >
+        <LiveIcon active={moving} />
+        Live
+      </button>
+    </>
+  );
+}
+
+/** The concentric "live" mark. */
+export function LiveIcon({ active = false, size = 16 }: { active?: boolean; size?: number }) {
+  return (
+    <svg aria-hidden viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" className={active ? "animate-pulse" : ""}>
+      <circle cx="12" cy="12" r="3" fill="currentColor" stroke="none" />
+      <circle cx="12" cy="12" r="6.2" strokeWidth="1.6" />
+      <circle cx="12" cy="12" r="9.6" strokeWidth="1.4" strokeDasharray="1.2 2.6" strokeLinecap="round" />
+    </svg>
   );
 }
