@@ -247,9 +247,43 @@
   animation-delay: var(--delay);
   will-change: transform;
 }
-.memory-drift[data-paused="true"],
-.memory-drift[data-offscreen="true"] {
+.memory-drift[data-paused="true"] {
   animation-play-state: paused;
+}
+
+/* Memories flying across the sky, right → left, on an endless loop */
+@keyframes memory-fly {
+  from {
+    transform: translate3d(var(--from), 0, 0);
+  }
+  to {
+    transform: translate3d(var(--to), 0, 0);
+  }
+}
+.memory-fly {
+  transform: translate3d(var(--from), 0, 0);
+  animation: memory-fly var(--fly-dur) linear infinite;
+  animation-delay: var(--fly-delay);
+  will-change: transform;
+}
+/* Held (opened) — it stops exactly where it was and waits there */
+.memory-fly[data-paused="true"] {
+  animation-play-state: paused;
+}
+/* A gentle pause under the mouse makes it easy to catch one */
+@media (hover: hover) {
+  .memory-fly:hover {
+    animation-play-state: paused;
+  }
+}
+/* Keyboard users can catch one too (mouse/touch focus doesn't count) */
+.memory-fly:has(:focus-visible) {
+  animation-play-state: paused;
+}
+/* Soft fade where memories enter and leave */
+.memory-sky {
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%);
 }
 .eq-bar {
   transform-origin: bottom;
@@ -311,6 +345,12 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
+  }
+  /* The flight is slow and linear, and it is the whole point of the page,
+     so it keeps going (the bob and tilt below are switched off instead). */
+  .memory-fly {
+    animation-duration: var(--fly-dur) !important;
+    animation-iteration-count: infinite !important;
   }
   .memory-drift,
   .animate-twinkle,

@@ -56,7 +56,10 @@ export default function MediaModal({ items, index, origin, aspectOf, onClose, on
   const captionH = narrow ? 64 : 76;
   const maxW = Math.min(vp.w - (narrow ? 24 : 180), 960);
   const maxH = vp.h * (narrow ? 0.62 : 0.7) - captionH;
-  const mediaW = Math.max(160, Math.min(maxW - pad * 2, maxH * aspect));
+  // Never so narrow that the caption can't breathe; very tall shots get soft letterboxing instead.
+  const minW = Math.min(maxW - pad * 2, narrow ? 250 : 320);
+  const mediaW = Math.max(minW, Math.min(maxW - pad * 2, maxH * aspect));
+  const boxAspect = Math.max(aspect, mediaW / maxH);
   const figW = mediaW + pad * 2;
 
   const variants: Variants = {
@@ -142,7 +145,7 @@ export default function MediaModal({ items, index, origin, aspectOf, onClose, on
               className="pointer-events-auto relative m-0 bg-[#f7f1e6] shadow-[0_40px_90px_-20px_rgba(0,0,0,0.7),0_10px_25px_rgba(0,0,0,0.35)]"
               style={{ width: figW, padding: pad, paddingBottom: 0 }}
             >
-              <div className="relative overflow-hidden bg-[#1d1814]" style={{ aspectRatio: `${aspect}` }}>
+              <div className="relative overflow-hidden bg-[#1d1814]" style={{ aspectRatio: `${boxAspect}` }}>
                 <AnimatePresence initial={false} mode="popLayout">
                   <motion.div
                     key={index}
@@ -168,9 +171,9 @@ export default function MediaModal({ items, index, origin, aspectOf, onClose, on
                 </AnimatePresence>
               </div>
 
-              <figcaption className="flex items-center justify-between gap-3 px-1" style={{ height: captionH }}>
+              <figcaption className="flex items-center justify-between gap-3 px-1 py-2" style={{ minHeight: captionH }}>
                 <div className="min-w-0">
-                  <p className="truncate font-script text-[clamp(1.6rem,4.5vw,2.2rem)] leading-tight text-ink-soft">{item.caption}</p>
+                  <p className="line-clamp-2 font-script text-[clamp(1.5rem,4.2vw,2.1rem)] leading-[1.15] text-ink-soft">{item.caption}</p>
                   {item.date && <p className="truncate text-[0.62rem] uppercase tracking-[0.26em] text-taupe">{item.date}</p>}
                 </div>
                 <p className="shrink-0 font-display text-sm italic tabular-nums text-taupe">

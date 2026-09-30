@@ -38,7 +38,7 @@ export default function MemoriesPage() {
           </motion.p>
         </header>
 
-        <div className="mx-auto mt-10 max-w-[1500px] sm:mt-14">
+        <div className="mt-8 w-full sm:mt-10">
           {memories.length ? (
             <MemoryGallery items={memories} />
           ) : (
