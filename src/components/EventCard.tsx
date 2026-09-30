@@ -116,7 +116,7 @@ export default function EventCard({ stop, phase, now, isNext, celebrate, onCeleb
         {!locked && (
           <motion.div
             aria-hidden
-            className="pointer-events-none absolute -right-2 -top-4 h-[4.2rem] w-[4.2rem] text-gold-deep mix-blend-multiply sm:-right-4 sm:-top-5 sm:h-[5.4rem] sm:w-[5.4rem]"
+            className="pointer-events-none absolute -right-2 -top-4 h-[4.2rem] w-[4.2rem] stamp-ink text-gold-deep mix-blend-multiply sm:-right-4 sm:-top-5 sm:h-[5.4rem] sm:w-[5.4rem]"
             initial={celebrate ? { opacity: 0, scale: 1.9 } : false}
             animate={{ opacity: phase === "done" ? 0.34 : 0.5, scale: 1 }}
             transition={{ delay: celebrate ? 1.05 : 0, type: "spring", stiffness: 420, damping: 16 }}

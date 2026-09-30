@@ -116,6 +116,14 @@ export default function General({ d }: { d: ContentBundle }) {
         <LongText label="Closing line" value={s.finale.closing} rows={2} onChange={(v) => edit((x) => void (x.site.finale.closing = v))} />
       </Card>
 
+      <Card title="Sky" hint="The whole site changes look with her phone's clock: daytime cream → sunset → starry night.">
+        <div className="grid gap-4 sm:grid-cols-3">
+          <TimeInput label="Sunset begins" value={s.sky.sunsetFrom} onChange={(v) => edit((x) => void (x.site.sky.sunsetFrom = v))} />
+          <TimeInput label="Starry night begins" value={s.sky.nightFrom} onChange={(v) => edit((x) => void (x.site.sky.nightFrom = v))} />
+          <TimeInput label="Morning (night ends)" value={s.sky.morningFrom} onChange={(v) => edit((x) => void (x.site.sky.morningFrom = v))} />
+        </div>
+      </Card>
+
       <Card title="Song" hint="The file itself is public/assets/music/sempurna.mp3.">
         <Row>
           <Text label="Title" value={s.music.title} onChange={(v) => edit((x) => void (x.site.music.title = v))} />

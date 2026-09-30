@@ -175,7 +175,7 @@ export default function WelcomePage() {
               style={{
                 left: leaving.x - 20,
                 top: leaving.y - 20,
-                background: "radial-gradient(circle, #fffaf0 0%, #fff6e6 45%, rgba(255,244,224,0) 70%)",
+                background: "radial-gradient(circle, var(--bloom-core) 0%, var(--bloom-mid) 45%, transparent 70%)",
               }}
               initial={{ scale: 0, opacity: 0.9 }}
               animate={{ scale: Math.hypot(window.innerWidth, window.innerHeight) / 13, opacity: 1 }}

@@ -19,6 +19,9 @@ export function validate(c: ContentBundle): Problem[] {
   if (blank(s.boyfriendName)) p.push({ section: "general", message: "Your name is empty." });
   if (!isDate(s.birthdayDate)) p.push({ section: "general", message: "The birthday date isn't a valid date." });
   if (!isTime(s.menu.sealed.opensAt)) p.push({ section: "general", message: "The time the sealed cards open isn't a valid time." });
+  const sky = s.sky;
+  if (!isTime(sky.sunsetFrom) || !isTime(sky.nightFrom) || !isTime(sky.morningFrom)) p.push({ section: "general", message: "The sky times need valid times." });
+  else if (!(sky.morningFrom < sky.sunsetFrom && sky.sunsetFrom < sky.nightFrom)) p.push({ section: "general", message: "Sky times must go morning → sunset → night (in that order)." });
   if (!(s.music.volume >= 0 && s.music.volume <= 1)) p.push({ section: "general", message: "Music volume must be between 0 and 1." });
   if (blank(s.introduction.title)) p.push({ section: "general", message: "The welcome title is empty." });
   if (s.introduction.noTeases.length === 0) p.push({ section: "general", message: "Add at least one NO-button tease." });

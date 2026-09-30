@@ -74,13 +74,13 @@ function Finale() {
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(to bottom, transparent 0%, rgba(234,214,207,0.55) 30%, rgba(222,196,160,0.55) 70%, rgba(205,172,125,0.5) 100%)",
+            "var(--finale-wash)",
         }}
       />
       <motion.div
         aria-hidden
         className="absolute left-1/2 top-1/2 h-[80vmin] w-[80vmin] -translate-x-1/2 -translate-y-1/2 rounded-full"
-        style={{ background: "radial-gradient(circle, rgba(255,246,228,0.95) 0%, rgba(255,240,214,0.4) 40%, transparent 70%)" }}
+        style={{ background: "var(--finale-glow)" }}
         initial={{ opacity: 0, scale: 0.6 }}
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true, amount: 0.4 }}

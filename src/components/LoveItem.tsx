@@ -91,7 +91,7 @@ export default function LoveItem({
                 exit={{ rotateX: -40, opacity: 0 }}
                 transition={{ duration: 0.8, delay: 0.1, ease: silk }}
                 style={{ transformOrigin: "top center", transformPerspective: 900 }}
-                className="relative rounded-md px-5 pb-5 pt-6 sm:px-8 sm:pt-7"
+                className="keep-light relative rounded-md px-5 pb-5 pt-6 sm:px-8 sm:pt-7"
               >
                 <div aria-hidden className="absolute inset-0 rounded-md bg-[#f6ebe5]" style={{ backgroundImage: "var(--grain)" }} />
                 <span aria-hidden className="absolute inset-x-4 top-3 border-t border-dashed border-rose/30" />

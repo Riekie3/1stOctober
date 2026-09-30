@@ -11,6 +11,7 @@ import UpdateNotice from "./components/UpdateNotice";
 import { isPreview } from "./content";
 import { music } from "./lib/music";
 import { forceFullMotion } from "./lib/motion";
+import { useSkyTheme } from "./lib/theme";
 
 import WelcomePage from "./pages/WelcomePage";
 import MainMenuPage from "./pages/MainMenuPage";
@@ -37,6 +38,17 @@ export default function App() {
 function Experience() {
   const location = useLocation();
   const dark = location.pathname === "/memories";
+  const theme = useSkyTheme();
+
+  // Day → sunset → starry night: the whole palette follows her clock.
+  useEffect(() => {
+    const root = document.documentElement;
+    root.dataset.theme = theme;
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "night" ? "#0b1024" : theme === "sunset" ? "#f3c1a4" : "#f5eee3");
+    return () => {
+      delete root.dataset.theme;
+    };
+  }, [theme]);
 
   // The song plays as soon as the site opens — or, where the browser insists
   // on an interaction first, on her very first tap / click / key press.
@@ -46,7 +58,7 @@ function Experience() {
 
   return (
     <MotionConfig reducedMotion={forceFullMotion ? "never" : "user"}>
-      <AnimatedBackground dark={dark} />
+      <AnimatedBackground dark={dark} theme={theme} />
 
       <AnimatePresence mode="wait" onExitComplete={() => window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior })}>
         <Routes location={location} key={location.pathname}>

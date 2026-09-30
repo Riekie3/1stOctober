@@ -146,7 +146,7 @@ export default function MediaModal({ items, index, origin, aspectOf, onClose, on
               animate="center"
               exit="from"
               transition={{ type: "spring", stiffness: 170, damping: 23, mass: 0.9 }}
-              className="pointer-events-auto relative m-0 bg-[#f7f1e6] shadow-[0_40px_90px_-20px_rgba(0,0,0,0.7),0_10px_25px_rgba(0,0,0,0.35)]"
+              className="keep-light pointer-events-auto relative m-0 bg-[#f7f1e6] shadow-[0_40px_90px_-20px_rgba(0,0,0,0.7),0_10px_25px_rgba(0,0,0,0.35)]"
               style={{ width: figW, padding: pad, paddingBottom: 0 }}
             >
               <div className="relative overflow-hidden bg-[#1d1814]" style={{ aspectRatio: `${boxAspect}` }}>

@@ -190,7 +190,7 @@ export default function MemoryGallery({ items }: { items: MemoryItem[] }) {
                       onClick={() => open(i)}
                       aria-label={`${m.type === "video" ? "Play video" : m.live ? "Open live photo" : "Open photo"}: ${m.caption}`}
                       aria-haspopup="dialog"
-                      className="group block w-full cursor-zoom-in bg-[#f7f1e6] p-[5%] pb-[4%] text-left shadow-[0_18px_40px_-12px_rgba(0,0,0,0.55),0_4px_10px_rgba(0,0,0,0.25)] outline-offset-4"
+                      className="keep-light group block w-full cursor-zoom-in bg-[#f7f1e6] p-[5%] pb-[4%] text-left shadow-[0_18px_40px_-12px_rgba(0,0,0,0.55),0_4px_10px_rgba(0,0,0,0.25)] outline-offset-4"
                       style={{ visibility: paused ? "hidden" : "visible" }}
                       whileHover={{ scale: 1.06, y: -4 }}
                       whileTap={{ scale: 0.98 }}

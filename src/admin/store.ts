@@ -120,7 +120,8 @@ export async function load() {
     try {
       const saved = JSON.parse(localStorage.getItem(DRAFT_KEY) ?? "null") as { draft: ContentBundle } | null;
       if (saved?.draft && !same(saved.draft, base)) {
-        draft = saved.draft;
+        // Settings added since the draft was saved come from the published version.
+        draft = { ...base, ...saved.draft, site: { ...base.site, ...saved.draft.site } };
         restored = true;
       }
     } catch {

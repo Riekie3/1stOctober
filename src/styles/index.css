@@ -27,6 +27,115 @@
   --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ─────────────────────────────────────────────────────────────
+   Sky themes — daytime (above), sunset 18:00–19:30, starry night after.
+   The <html data-theme="…"> attribute is set by the app from her clock.
+   Registered colours so the whole site can fade between palettes.
+   ───────────────────────────────────────────────────────────── */
+@property --color-ivory { syntax: "<color>"; inherits: true; initial-value: #f5eee3; }
+@property --color-cream { syntax: "<color>"; inherits: true; initial-value: #fffcf6; }
+@property --color-paper { syntax: "<color>"; inherits: true; initial-value: #fbf6ec; }
+@property --color-champagne { syntax: "<color>"; inherits: true; initial-value: #dcc6a0; }
+@property --color-gold { syntax: "<color>"; inherits: true; initial-value: #a5824c; }
+@property --color-gold-deep { syntax: "<color>"; inherits: true; initial-value: #7f6235; }
+@property --color-gold-soft { syntax: "<color>"; inherits: true; initial-value: #cdb07d; }
+@property --color-blush { syntax: "<color>"; inherits: true; initial-value: #ead6cf; }
+@property --color-rose { syntax: "<color>"; inherits: true; initial-value: #b27f73; }
+@property --color-ink { syntax: "<color>"; inherits: true; initial-value: #2a2521; }
+@property --color-ink-soft { syntax: "<color>"; inherits: true; initial-value: #4a423b; }
+@property --color-taupe { syntax: "<color>"; inherits: true; initial-value: #7a7064; }
+
+:root {
+  /* extras that change with the sky */
+  --paper-sheen: rgba(255, 255, 255, 0.75);
+  --edge-sheen: rgba(255, 255, 255, 0.8);
+  --glare: rgba(255, 255, 255, 0.55);
+  --bloom-core: #fffaf0;
+  --bloom-mid: #fff6e6;
+  --finale-wash: linear-gradient(to bottom, transparent 0%, rgba(234, 214, 207, 0.55) 30%, rgba(222, 196, 160, 0.55) 70%, rgba(205, 172, 125, 0.5) 100%);
+  --finale-glow: radial-gradient(circle, rgba(255, 246, 228, 0.95) 0%, rgba(255, 240, 214, 0.4) 40%, transparent 70%);
+  transition:
+    --color-ivory 2.4s var(--ease-soft),
+    --color-cream 2.4s var(--ease-soft),
+    --color-paper 2.4s var(--ease-soft),
+    --color-champagne 2.4s var(--ease-soft),
+    --color-gold 2.4s var(--ease-soft),
+    --color-gold-deep 2.4s var(--ease-soft),
+    --color-gold-soft 2.4s var(--ease-soft),
+    --color-blush 2.4s var(--ease-soft),
+    --color-rose 2.4s var(--ease-soft),
+    --color-ink 2.4s var(--ease-soft),
+    --color-ink-soft 2.4s var(--ease-soft),
+    --color-taupe 2.4s var(--ease-soft);
+}
+
+:root[data-theme="sunset"] {
+  --color-ivory: #f6e2d4;
+  --color-cream: #fff4ea;
+  --color-paper: #fdeee2;
+  --color-champagne: #e8b999;
+  --color-gold: #b77443;
+  --color-gold-deep: #8f4f2c;
+  --color-gold-soft: #dda27c;
+  --color-blush: #f1cabf;
+  --color-rose: #b85f55;
+  --color-ink: #2e1f1c;
+  --color-ink-soft: #533b35;
+  --color-taupe: #86665c;
+  --bloom-core: #fff1dc;
+  --bloom-mid: #ffd9b8;
+  --finale-wash: linear-gradient(to bottom, transparent 0%, rgba(241, 190, 170, 0.5) 30%, rgba(240, 160, 115, 0.5) 70%, rgba(214, 110, 80, 0.45) 100%);
+  --finale-glow: radial-gradient(circle, rgba(255, 226, 170, 0.95) 0%, rgba(255, 190, 130, 0.4) 40%, transparent 70%);
+}
+
+:root[data-theme="night"] {
+  --color-ivory: #0b1024;
+  --color-cream: #151c38;
+  --color-paper: #131a33;
+  --color-champagne: #3b4470;
+  --color-gold: #d8b774;
+  --color-gold-deep: #ecd29a;
+  --color-gold-soft: #b89a63;
+  --color-blush: #2b2748;
+  --color-rose: #e0a3a3;
+  --color-ink: #f2ecdf;
+  --color-ink-soft: #d6cfc3;
+  --color-taupe: #a3a8c3;
+  --paper-sheen: rgba(150, 170, 255, 0.08);
+  --edge-sheen: rgba(200, 210, 255, 0.08);
+  --glare: rgba(200, 212, 255, 0.12);
+  --bloom-core: #f4f6ff;
+  --bloom-mid: #c9d2ff;
+  --finale-wash: linear-gradient(to bottom, transparent 0%, rgba(30, 38, 80, 0.5) 40%, rgba(60, 50, 90, 0.45) 100%);
+  --finale-glow: radial-gradient(circle, rgba(255, 236, 190, 0.28) 0%, rgba(200, 180, 255, 0.12) 40%, transparent 70%);
+}
+
+/* Paper objects (envelope, letter, little notes, photo frames) stay cream in
+   every sky — like a letter read by moonlight — so their text stays dark. */
+.keep-light {
+  --color-ivory: #f5eee3;
+  --color-cream: #fffcf6;
+  --color-paper: #fbf6ec;
+  --color-champagne: #dcc6a0;
+  --color-gold: #a5824c;
+  --color-gold-deep: #7f6235;
+  --color-gold-soft: #cdb07d;
+  --color-blush: #ead6cf;
+  --color-rose: #b27f73;
+  --color-ink: #2a2521;
+  --color-ink-soft: #4a423b;
+  --color-taupe: #7a7064;
+  --paper-sheen: rgba(255, 255, 255, 0.75);
+  --edge-sheen: rgba(255, 255, 255, 0.8);
+  --glare: rgba(255, 255, 255, 0.55);
+  color: var(--color-ink);
+}
+
+/* Passport stamps are "inked" with multiply — on a dark card, glow instead. */
+:root[data-theme="night"] .stamp-ink {
+  mix-blend-mode: screen;
+}
+
 @layer base {
   html {
     -webkit-text-size-adjust: 100%;
@@ -95,7 +204,7 @@
   .paper {
     background-color: var(--color-paper);
     background-image:
-      radial-gradient(120% 90% at 10% 0%, rgba(255, 255, 255, 0.75), transparent 55%),
+      radial-gradient(120% 90% at 10% 0%, var(--paper-sheen), transparent 55%),
       radial-gradient(90% 80% at 100% 100%, rgba(220, 198, 160, 0.18), transparent 60%),
       var(--grain);
     background-blend-mode: normal, normal, multiply;
@@ -103,14 +212,14 @@
 
   .shadow-paper {
     box-shadow:
-      0 1px 0 rgba(255, 255, 255, 0.8) inset,
+      0 1px 0 var(--edge-sheen) inset,
       0 1px 2px rgba(60, 42, 20, 0.06),
       0 8px 24px -10px rgba(60, 42, 20, 0.16),
       0 30px 60px -30px rgba(60, 42, 20, 0.22);
   }
   .shadow-lift {
     box-shadow:
-      0 1px 0 rgba(255, 255, 255, 0.8) inset,
+      0 1px 0 var(--edge-sheen) inset,
       0 2px 4px rgba(60, 42, 20, 0.06),
       0 18px 40px -14px rgba(60, 42, 20, 0.26),
       0 50px 90px -40px rgba(60, 42, 20, 0.3);
@@ -290,6 +399,46 @@
   animation: eq 0.9s ease-in-out infinite;
 }
 
+/* Night sky: star groups gently breathe; now and then a star shoots across */
+@keyframes star-breathe {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+.star-group {
+  animation: star-breathe var(--t, 5s) ease-in-out infinite;
+  animation-delay: var(--d, 0s);
+}
+@keyframes shoot {
+  0%,
+  88% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) rotate(-32deg) scaleX(0.2);
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(-38vw, 24vw, 0) rotate(-32deg) scaleX(1);
+  }
+}
+.shooting-star {
+  position: absolute;
+  width: 140px;
+  height: 1.5px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(255, 250, 235, 0.95), rgba(255, 250, 235, 0));
+  transform-origin: left center;
+  opacity: 0;
+  animation: shoot var(--shoot-dur, 14s) linear infinite;
+  animation-delay: var(--shoot-delay, 0s);
+}
+
 /* Custom range input used by the music player */
 .range {
   -webkit-appearance: none;
@@ -353,6 +502,8 @@
     animation-iteration-count: infinite !important;
   }
   .memory-drift,
+  .star-group,
+  .shooting-star,
   .animate-twinkle,
   .animate-glow,
   .animate-spin-slow,

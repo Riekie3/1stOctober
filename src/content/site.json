@@ -8,6 +8,11 @@
     "artist": "Insomniacks",
     "volume": 0.6
   },
+  "sky": {
+    "sunsetFrom": "18:00",
+    "nightFrom": "19:30",
+    "morningFrom": "06:00"
+  },
   "introduction": {
     "eyebrow": "A day made for you",
     "title": "Happy Birthday",

@@ -101,7 +101,7 @@ function Envelope({ opening, onOpen }: { opening: boolean; onOpen: () => void })
 
   return (
     <motion.div
-      className="relative aspect-[3/2] w-[min(32rem,90vw)] [perspective:1100px]"
+      className="keep-light relative aspect-[3/2] w-[min(32rem,90vw)] [perspective:1100px]"
       initial={{ opacity: 0, y: 30, rotate: -2 }}
       animate={{ opacity: 1, y: opening ? 60 : 0, rotate: opening ? 0 : -2 }}
       transition={{ duration: opening ? 1.2 : 1, delay: opening ? 0.9 : 0.3, ease: silk }}
@@ -191,7 +191,7 @@ function Letter({ ref }: { ref: React.Ref<HTMLElement> }) {
       ref={ref}
       tabIndex={-1}
       aria-label="Letter"
-      className="paper relative mx-auto max-w-2xl rounded-[4px] px-6 pb-14 pt-12 shadow-lift outline-none sm:px-16 sm:pb-20 sm:pt-16"
+      className="keep-light paper relative mx-auto max-w-2xl rounded-[4px] px-6 pb-14 pt-12 shadow-lift outline-none sm:px-16 sm:pb-20 sm:pt-16"
     >
       {/* fold creases */}
       <span aria-hidden className="pointer-events-none absolute inset-x-0 top-1/3 h-px bg-gradient-to-r from-transparent via-[rgba(120,90,50,0.10)] to-transparent" />

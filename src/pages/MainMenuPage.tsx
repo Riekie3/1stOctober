@@ -106,7 +106,7 @@ function TiltCard({
   const srx = useSpring(rx, { stiffness: 160, damping: 18 });
   const sry = useSpring(ry, { stiffness: 160, damping: 18 });
   const sglow = useSpring(glow, { stiffness: 120, damping: 20 });
-  const glare = useMotionTemplate`radial-gradient(420px circle at ${gx}% ${gy}%, ${dark ? "rgba(255,226,170,0.16)" : "rgba(255,255,255,0.55)"}, transparent 55%)`;
+  const glare = useMotionTemplate`radial-gradient(420px circle at ${gx}% ${gy}%, ${dark ? "rgba(255,226,170,0.16)" : "var(--glare)"}, transparent 55%)`;
 
   const onMove = (e: React.PointerEvent) => {
     if (sealed || e.pointerType !== "mouse" || !ref.current) return;
@@ -297,7 +297,7 @@ function EnvelopeCard() {
   const card = birthdayConfig.menu.cards.wish;
   const initial = birthdayConfig.girlfriendName.trim().charAt(0).toUpperCase() || "♡";
   return (
-    <div className="relative flex h-full flex-col justify-between overflow-hidden p-6 sm:p-8" style={{ background: "linear-gradient(160deg, #f6e9e3 0%, #ecd8d0 100%)" }}>
+    <div className="keep-light relative flex h-full flex-col justify-between overflow-hidden p-6 sm:p-8" style={{ background: "linear-gradient(160deg, #f6e9e3 0%, #ecd8d0 100%)" }}>
       <div aria-hidden className="absolute inset-0 opacity-60" style={{ backgroundImage: "var(--grain)" }} />
       <div className="relative flex items-start justify-between">
         <CardText card={card} Icon={Feather} />

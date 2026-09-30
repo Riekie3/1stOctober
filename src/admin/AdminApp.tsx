@@ -212,6 +212,8 @@ function PreviewMenu() {
   const pages: [string, string, string?][] = [
     ["Welcome", ""],
     ["Menu", "menu"],
+    ["Menu at sunset", "menu", "18:45"],
+    ["Menu at night", "menu", "20:30"],
     ["Itinerary (morning)", "itinerary", "09:45"],
     ["Itinerary (evening)", "itinerary", "20:30"],
     ["Letter", "wish", "19:31"],
