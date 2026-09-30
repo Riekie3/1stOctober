@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { AnimatePresence, MotionConfig } from "framer-motion";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 
@@ -7,6 +7,7 @@ import BackButton from "./components/BackButton";
 import DevPanel from "./components/DevPanel";
 import MusicPlayer from "./components/MusicPlayer";
 import SealedRoute from "./components/SealedRoute";
+import { isPreview } from "./content";
 import { music } from "./lib/music";
 import { forceFullMotion } from "./lib/motion";
 
@@ -17,7 +18,22 @@ import WishPage from "./pages/WishPage";
 import MemoriesPage from "./pages/MemoriesPage";
 import LovePage from "./pages/LovePage";
 
+// The editor is only downloaded when someone opens /admin.
+const AdminApp = lazy(() => import("./admin/AdminApp"));
+
 export default function App() {
+  const location = useLocation();
+  if (location.pathname === "/admin" || location.pathname.startsWith("/admin/")) {
+    return (
+      <Suspense fallback={<div className="min-h-dvh bg-ivory" />}>
+        <AdminApp />
+      </Suspense>
+    );
+  }
+  return <Experience />;
+}
+
+function Experience() {
   const location = useLocation();
   const dark = location.pathname === "/memories";
 
@@ -46,6 +62,14 @@ export default function App() {
       <BackButton />
       <MusicPlayer dark={dark} />
       <DevPanel />
+
+      {isPreview && (
+        <div className="pointer-events-none fixed inset-x-0 top-0 z-[70] flex justify-center">
+          <span className="rounded-b-lg bg-ink/90 px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-gold-soft shadow-lift">
+            Preview · not published
+          </span>
+        </div>
+      )}
     </MotionConfig>
   );
 }

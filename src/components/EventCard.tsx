@@ -22,7 +22,7 @@ import { formatClock, formatTime, type ScheduledStop, type StopPhase } from "../
 import Countdown from "./Countdown";
 import { Burst, Stamp } from "./Ornaments";
 
-const icons: Record<ItineraryIcon, LucideIcon> = {
+export const itineraryIcons: Record<ItineraryIcon, LucideIcon> = {
   car: Car,
   food: Utensils,
   coffee: Coffee,
@@ -54,7 +54,7 @@ export interface EventCardProps {
 export default function EventCard({ stop, phase, now, isNext, celebrate, onCelebrated, railFill, isLast }: EventCardProps) {
   const locked = phase === "locked";
   const { clock, suffix } = formatTime(stop.time);
-  const Icon = icons[stop.icon] ?? Sparkles;
+  const Icon = itineraryIcons[stop.icon] ?? Sparkles;
   const stampLabel = stop.alwaysVisible ? "DEPARTURE" : phase === "done" ? "VISITED" : "REVEALED";
   const rotation = ((stop.id * 37) % 26) - 13;
 

@@ -51,6 +51,30 @@ git push
 
 Progress shows under the repository's **Actions** tab. If the page ever shows GitHub's 404, check **Settings → Pages**: the source should be **Deploy from a branch → gh-pages → / (root)**.
 
+### Admin page — edit everything without code
+
+Open **https://riekie3.github.io/1stOctober/admin** on your laptop.
+
+1. **Sign in (once).** Paste a GitHub key. The sign-in page shows how to create it: a *fine-grained token* with access to only the `1stOctober` repository, with **Contents: Read and write** and **Actions: Read-only**. The key stays in that browser.
+2. **Edit** in the sidebar:
+   - **General:** names, date, welcome text, NO teases, menu, sealed cards and their opening time, page titles, final message, song info.
+   - **Itinerary:** stops with time, icon, title, location, description, clue.
+   - **Letter:** the opening line, paragraphs and sign-off.
+   - **Love notes:** reasons with short lines and secret notes.
+   - **Memories:** drop photos and videos (HEIC works), drag to reorder, write captions and dates, replace or remove items.
+3. **Preview** opens any page in a new tab with your changes (with times like 19:31 so sealed pages open). A "Preview · not published" ribbon marks it.
+4. **Publish** saves everything to GitHub in one go. The bar at the top follows the rebuild, and the site is live in about 2 minutes.
+
+Good to know:
+- **Drafts save as you type.** Close the tab and they come back next time. Nothing reaches the site until you press Publish.
+- **Mistakes are caught first.** Empty names, broken times and missing captions are listed, and Publish waits until they're fixed.
+- **Photos** are resized and their location data removed automatically. A photo and a clip of up to about 4 seconds with the same name (an iPhone Live Photo) become one Live Photo.
+- **Videos** are uploaded as they are: keep them under about 50 MB (GitHub's hard limit is 100 MB). Use iPhone *Most Compatible* format so they play everywhere.
+- **Removing** a memory also deletes its files on the next publish.
+- **Conflicts are caught.** If something else changed the same content since you opened the admin page, it asks before overwriting.
+
+Behind the scenes the content lives in `src/content/*.json`. You can still edit those by hand, and the admin page reads and writes the same files.
+
 ### It's a PWA
 
 It can be installed like an app. On an iPhone, open the link in Safari, tap **Share → Add to Home Screen**. On Android or desktop Chrome, use **Install app** / **Add to Home screen**. Once opened, the app shell works offline. Photos are kept after she's viewed them. The song and videos need a connection.

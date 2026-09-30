@@ -57,7 +57,8 @@ export default defineConfig({
         // The app shell (code, styles, fonts, icons) works offline once visited.
         globPatterns: ["**/*.{js,css,html,svg,png,woff2,webmanifest}"],
         // …but not the photo placeholders and big media; those use the runtime rules below.
-        globIgnores: ["**/assets/**", "404.html"],
+        // …and not the admin editor (only you need it, and the HEIC converter alone is 3 MB).
+        globIgnores: ["**/assets/**", "404.html", "**/static/AdminApp-*.js", "**/static/heic-to-*.js", "**/static/full.esm-*.js"],
         navigateFallback: `${base}index.html`,
         cleanupOutdatedCaches: true,
         runtimeCaching: [
