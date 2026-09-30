@@ -67,7 +67,7 @@
   "itinerary": {
     "title": "The Day Ahead",
     "subtitle": "Your birthday passport. Each stop reveals itself ten minutes before we get there.",
-    "unlockMinutesBefore": 10,
+    "unlockMinutesBefore": 15,
     "dayEndsAt": "23:30",
     "revealToast": "Your next surprise has been revealed."
   },
