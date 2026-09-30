@@ -7,6 +7,7 @@ import BackButton from "./components/BackButton";
 import DevPanel from "./components/DevPanel";
 import MusicPlayer from "./components/MusicPlayer";
 import SealedRoute from "./components/SealedRoute";
+import UpdateNotice from "./components/UpdateNotice";
 import { isPreview } from "./content";
 import { music } from "./lib/music";
 import { forceFullMotion } from "./lib/motion";
@@ -62,6 +63,7 @@ function Experience() {
       <BackButton />
       <MusicPlayer dark={dark} />
       <DevPanel />
+      <UpdateNotice dark={dark} />
 
       {isPreview && (
         <div className="pointer-events-none fixed inset-x-0 top-0 z-[70] flex justify-center">

@@ -59,9 +59,26 @@ export default defineConfig({
         // …but not the photo placeholders and big media; those use the runtime rules below.
         // …and not the admin editor (only you need it, and the HEIC converter alone is 3 MB).
         globIgnores: ["**/assets/**", "404.html", "**/static/AdminApp-*.js", "**/static/heic-to-*.js", "**/static/full.esm-*.js"],
-        navigateFallback: `${base}index.html`,
+        // Opening the site always asks for the newest version first, so what you
+        // publish shows up straight away. The saved copy is only used offline
+        // (or if the network takes longer than 4 seconds).
+        navigateFallback: null,
+        skipWaiting: true,
+        clientsClaim: true,
         cleanupOutdatedCaches: true,
         runtimeCaching: [
+          {
+            urlPattern: ({ request }) => request.mode === "navigate",
+            handler: "NetworkFirst",
+            options: {
+              cacheName: "pages",
+              networkTimeoutSeconds: 4,
+              fetchOptions: { cache: "no-cache" },
+              // GitHub Pages answers inner pages (/menu, /wish…) with its 404 page, which is the app.
+              cacheableResponse: { statuses: [0, 200, 404] },
+              precacheFallback: { fallbackURL: `${base}index.html` },
+            },
+          },
           {
             // Photos: keep a copy after the first view.
             urlPattern: ({ url }) => url.pathname.includes("/assets/photos/"),
