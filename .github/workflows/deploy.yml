@@ -1,10 +1,13 @@
-# Builds the site and publishes it to GitHub Pages on every push to main.
+# Builds the site and publishes it to GitHub Pages.
+# PAUSED: this no longer runs on push. To put the site back online, re-enable
+# the push trigger below (or run this workflow by hand from the Actions tab),
+# then set Settings → Pages → Deploy from a branch → gh-pages → / (root).
 # The site ends up at https://<user>.github.io/<repository>/
 name: Deploy to GitHub Pages
 
 on:
-  push:
-    branches: [main]
+  # push:
+  #   branches: [main]
   workflow_dispatch:
 
 permissions:
